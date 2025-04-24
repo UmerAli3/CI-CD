@@ -1,19 +1,30 @@
-# .github/workflows/test.yml
-name: Run Tic Tac Toe (test build)
+name: Python CI for Tic Tac Toe
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
-  run-python:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
 
-      - name: Run the game file
-        run: |
-          python tic_tac_toe.py
+    - name: Lint with flake8
+      run: |
+        pip install flake8
+        flake8 tic_tac_toe.py
+
+    - name: Run syntax check (no execution)
+      run: |
+        python -m py_compile tic_tac_toe.py
+
